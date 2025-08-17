@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Internet - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #dffef9;
+            --heading-color: #1ee5d4;
+            --para-color: #555;
+            --container-bg: #ffffff;
+            --onlone-color: #27ff5d;
+            --offline-color: #ee1e1e;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--main-background);
+        }
+
+        .container{
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            max-width: 400px;
+        }
+
+        h1{
+            font-size: 40px;
+            color: var(--heading-color);
+        }
+
+        p{
+            font-size: 20px;
+            color: var(--para-color);
+            margin-bottom: 30px;
+        }
+
+        .show-status{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .colorbox{
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            transition: box-shadow 0.1s ease, background-color 0.1s ease;
+        }
+        
+        /* Online mode color and indication */
+        .colorbox.online{
+            background-color: var(--onlone-color);
+            box-shadow: 0px 0px 20px var(--onlone-color);
+        }
+
+        /* Offline mode color and indication */
+        .colorbox.offline{
+            background-color: var(--offline-color);
+            box-shadow: 0 0 20px var(--offline-color);
+        }
+
+        .status{
+            font-size: 40px;
+            color: var(--heading-color);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Network Status</h1>
+        <p>This is will monitor real-time internet connection status.</p>
+        <div class="show-status">
+            <div class="colorbox"i id="statusindicator"></div>
+            <span class="status" id="statusmsg">Online</span>
+        </div>
+    </div>
+    <script>
+        const msg = document.getElementById("statusmsg");
+        const coloricon = document.getElementById("statusindicator");
+
+        // Writing function for checking the internet status by using navigator property
+        const checkInternet = () => {
+            if(navigator.onLine){ //If navigator means user is online then follow these instructions.
+                coloricon.classList.remove("offline");
+                coloricon.classList.add("online");
+                msg.textContent = "You are Online";
+            } else{
+                //Else do these instructions
+                coloricon.classList.remove("online");
+                coloricon.classList.add("offline");
+                msg.textContent = "You are Offline";
+            }
+        }
+
+        checkInternet(); // Running the functions
+
+        // These lines detects when the connections status will change.
+        window.addEventListener("offline", checkInternet); //Adding event for offline mode
+        window.addEventListener("online", checkInternet); //Adding event for online mode
+    </script>
+</body>
+</html>

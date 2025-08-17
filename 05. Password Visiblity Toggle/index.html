@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Visiblity Toggle - Rebuild</title>
+    <style>
+        :root{ 
+            --main-background: #fff3f8;
+            --heading-color: #f51070;
+            --para-color: #555;
+            --container-bg: #ffffff;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--main-background);
+        }
+
+        .container{
+            max-width: 400px;
+            width: 100%;
+            background-color: var(--container-bg);
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-radius: 30px;
+        }
+
+        .password-field{
+            position: relative;
+        }
+
+        #input-field{
+            width: 100%;
+            padding: 14px;
+            padding-right: 50px;
+            border: 2px solid #cec8c8;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        #input-field::placeholder{
+            color: var(--heading-color);
+        }
+        #input-field:focus{
+            outline: none;
+            border-color: var(--heading-color);
+        }
+
+        .togglebtn{
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 26px;
+        }
+
+        .togglebtn:hover{
+            color: var(--heading-color);
+        }
+
+        .togglebtn:focus{
+            outline: none;
+        }
+
+        h1{
+            color: var(--heading-color);
+            font-size: 42px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Visiblity Toggle</h1>
+        <div class="password-field">
+            <input type="password" id="input-field" placeholder="Enter your password">
+            <button class="togglebtn" id="togglebtn">😀</button>
+        </div>
+    </div>
+    <script>
+        const input = document.getElementById("input-field");
+        const togglebtn = document.getElementById("togglebtn");
+
+        togglebtn.addEventListener("click", () => {
+            const passType = input.getAttribute("type"); // Get the current type of input
+            // Toggle the type and button text based on current type
+            if(passType == "password"){
+                input.setAttribute("type", "text");
+                togglebtn.textContent = "😑";
+            } else{
+                input.setAttribute("type", "password");
+                togglebtn.textContent = "😀";
+            }
+        })
+    </script>
+</body>
+</html>

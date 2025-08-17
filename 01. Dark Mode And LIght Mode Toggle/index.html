@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light - Dark Mode Toggle</title>
+    <style>
+
+        /* Css variables  */
+        :root {
+            --bg-color-light: #ffffff;
+            --bg-color-dark: #1e1e1e;
+            --text-color-light: #333333;
+            --text-color-dark: #e3e3e3;
+            --button-bg-light: #ff0088;
+            --button-bg-dark: #444444;
+            --button-text-light: #444444;
+            --button-text-dark: #f5f5f5;
+            --container-bg-light: #f9f9f9;
+            --container-bg-dark: #2a2a2a;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px;
+            transition: background-color 0.3s, color 0.3s;
+            /* I have add transition as the chnage will look smooth */
+            /* I have delcared both the color and background in light and dark mode section. */
+        }
+
+        .container{
+            max-width: 600px;
+            /* border: 2px solid black; For trail*/
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            text-align: center;
+            background-color: var(--container-bg-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .paragraph{
+            font-size: 16px;
+            line-height: 20px;
+        }
+
+        .change-btn{
+            padding: 20px 26px;
+            border-radius: 20px;
+            color: var(--button-text-light);
+            font-size: 20px;
+            border: none;
+            background-color: var(--button-bg-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Light mode (default) */
+        body.light-mode{
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+        }
+
+        /* Please ensure that during writing code don't write body & lightmode like this body .light mode it will not work. Always write it together. */
+        body.light-mode .container{
+            background-color: var(--container-bg-light);
+        }
+
+        body.light-mode .change-btn{
+            background-color: var(--button-bg-light);
+            color: var(--button-text-light);
+        }
+
+        /* Dark Mode  */
+        body.dark-mode{
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        body.dark-mode .container{ 
+            background-color: var(--container-bg-dark);
+        }
+
+        body.dark-mode .change-btn{
+            background-color: var(--button-bg-dark);
+            color: var(--button-text-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <body class="light-mode">
+        <div class="container">
+            <h1 class="heading">Light Mode Dark Mode convertor</h1>
+            <!-- <h1 class="heading">convertor</h1> -->
+            <p class="paragraph">This is a demonstration of simple light mode and dark mode toggle. The theme preference is going to saved in the browser local storage.</p>
+            <!-- <p class="paragraph">The theme preference is going to saved in the browser local storage.</p> -->
+            <button class="change-btn">Switch to Dark Mode</button>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () =>{
+                // Selecting the content
+                const toggle = document.querySelector(".change-btn")
+                console.log(toggle)
+                const body = document.body;
+
+                // Function for changing the theme
+                const setTheme= (theme) =>{ //setTheme is not a name. You can check it changing it and apply it to below code.
+                    if(theme == "dark-mode"){
+                        body.classList.add("dark-mode"); //add dark mode
+                        body.classList.remove("light-mode"); // remove light mode
+                        toggle.textContent = "Switch to Light Mode"; //content inside the button will change to this.
+
+                    } else{
+                        body.classList.add("light-mode");
+                        body.classList.remove("dark-mode");
+                        toggle.textContent = "Switch to Dark Mode"
+                    } 
+                    localStorage.setItem("theme", theme); //Saving it to local storge of browser
+                }
+
+                // Check for saved theme in local storage.
+                const savedtheme = localStorage.getItem("theme");
+                if(savedtheme){
+                    setTheme(savedtheme);
+                } else{
+                    setTheme("light-mode");
+                }
+
+                // Adding event to the button
+
+                toggle.addEventListener("click", () => {
+                    const currentheme = body.classList.contains("light-mode") ? "light-mode" : "dark-mode"; // if class have the light theme then it will light theme otherwise dark theme
+                    const newtheme = currentheme == "light-mode" ? "dark-mode" : "light-mode"; // if current theme is equal light theme then change it to dark theme (which is the new theme). Otherwise to light theme
+                    setTheme(newtheme)// Delcare the new theme.
+                })
+            })
+        </script>
+    </body>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darg And Drop Menu - Rebuild</title>
+    <style>
+
+        :root{
+            --main-background: #f5ecfe;
+            --heading-color: #641ee5;
+            --para-color: #555;
+            --container-bg: #ffffff;
+            --item-bg: #c2baff;
+            --itme-border: #6a2eff;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--main-background);
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            text-align: center;
+            width: 100%;
+            /* border: 2px solid black; */
+            max-width: 800px;
+        }
+
+        .upper-section{
+            display: flex;
+            flex-direction: column;
+            line-height: 24px;
+        }
+
+        .heading{
+            font-size: 40px;
+            color: var(--heading-color);
+        }
+
+        .paragraph{
+            font-size: 18px;
+            color: var(--para-color);
+        }
+
+        .lower-section{
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 70px;
+        }
+        #left,
+        #right{
+            min-height: 350px;
+            min-width: 200px;
+            border-radius: 20px;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 2rem 2.5rem;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lists{
+            border: 2px solid var(--itme-border);
+            padding: 15px 20px;
+            min-width: 90%;
+            border-radius: 10px;
+            background-color: var(--heading-color);
+            font-size: 20px;
+            color: var(--container-bg);
+            box-shadow: 0 4px 7px rgba(0,0,0,0.4);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .lists:active{
+            cursor: grab;
+            transform: scale(1.08);
+        }
+
+        @media (max-width: 662px) {
+            .lower-section{
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 418px) {
+            .heading{
+                line-height: 50px;
+            }
+        }
+    </style>
+</head>
+    <body>
+    <div class="container">
+        <div class="upper-section">
+            <span class="heading">Drag And Drop Menu</span>
+            <p class="paragraph">Drag the items into the dropzone.</p>
+        </div>
+        <div class="lower-section">
+            <div id="left">
+                <div class="lists" draggable="true">Item 1</div>
+                <div class="lists" draggable="true">Item 2</div>
+                <div class="lists" draggable="true">Item 3</div>
+                <div class="lists" draggable="true">Item 4</div>
+                <div class="lists" draggable="true">Item 5</div>
+            </div>
+            <!-- dropzone -->
+            <div id="right">
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const lists = document.getElementsByClassName("lists");
+            const rightContainer = document.getElementById("right");
+            const leftContainer = document.getElementById("left");
+    
+            let selectedItem = null; // items are not yet select
+    
+            // Adding event for all lists elements.
+            for(list of lists) {
+                list.addEventListener("dragstart", (event) => {
+                    selectedItem = event.target;// it target that specific element which is going to be dragged.
+                });
+            }
+
+            rightContainer.addEventListener("dragover", (event) => {
+                event.preventDefault(); // It will preved the default behaviour while dragover event
+            })
+
+            rightContainer.addEventListener("drop", (event) => {
+                rightContainer.appendChild(selectedItem);
+                // In this, when the user drop the element it will add the selected item to right box.
+                selectedItem = null; //Set the selected item to none.
+            })
+
+            // same things if it starts from right box.
+            leftContainer.addEventListener("dragover", (event) => {
+                event.preventDefault();
+            })
+
+            leftContainer.addEventListener("drop", (event) => {
+                leftContainer.appendChild(selectedItem);
+                selectedItem = null;
+            })
+        })
+
+
+    </script>
+</body
+</html>

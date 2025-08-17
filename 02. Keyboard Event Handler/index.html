@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Event Handler - Rebuild</title>
+</head>
+<style>
+    
+    :root{
+        --container-bg: #f6f6f6;
+        --light-color-bg: #f6c1dd;
+        --dark-color-bg: #ff0088;
+        --para-color: #4a5568;
+        --color1: #ff0033;
+        --color2: #d000ff;
+        --color3: #00ffff;
+        --color4: #ff00c3;
+        --color5: #6200ff;
+    }
+
+    body{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 88vh;
+        padding: 2rem;
+        text-align: center;
+        /* background-image: linear-gradient(#ad70f4, #fedcff, #fd5879); */
+        background-color: #f5e5fd;
+    }
+
+    .container{
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        padding: 2rem;
+        max-width: 940px;
+        width: 70%;
+        border-radius: 20px;
+        background-color: var(--container-bg);
+    }
+
+    .top{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    h1{
+        margin-bottom: -10px;
+        font-size: 40px;
+        color: var(--dark-color-bg);
+    }
+
+    p{
+        font-size: 1.1rem;
+        color: var(--para-color);
+    }
+
+    .display-key{
+        font-size: 4rem;
+        font-weight: bold;
+        color: var(--dark-color-bg);
+        background-color: var(--light-color-bg);
+        padding: 1.5rem 2rem;
+        min-width: 150px;
+        display: inline-block;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+        transition: transform 0.1s ease;
+    }
+
+    .display-key.pressed{
+        background-color: var(--dark-color-bg);
+        color: var(--container-bg);
+    }
+
+    .event-details{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        background-color: var(--container-bg);
+        color: var(--dark-color-bg);
+    }
+
+    .details-box{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        min-width: 0px;
+        padding: 1.5rem 2rem;
+        border-radius: 20px;
+        flex-basis: calc(45% - 16rem);
+        box-shadow: 0 4px 8px rgba(231, 0, 162, 0.2);
+    }
+
+
+    strong{
+        font-size: 40px;
+        font-weight: bold;
+    }
+
+    .keyvalue,
+    .codevalue,
+    .shiftvalue,
+    .altvalue,
+    .ctrlvalue{
+        color: var(--color5);
+        font-size: 37px;
+        font-weight: bold;
+    }
+
+
+    /*  */
+
+    @media (max-width: 1164px) {
+        .details-box{
+            flex-basis: calc(70% - 10rem);
+        }
+    }
+
+
+    @media (max-width: 619px) {
+        .details-box{
+            flex-basis: calc(100%);
+        }
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="top">
+            <h1>Keyboard Event Handler</h1>
+            <p>Press a key on your keyboard, you will see the result.</p>
+        </div>
+        <div class="display-key"> Press a Key</div>
+        <div class="event-details">
+            <div class="details-box">
+                <strong>Key</strong>
+                <span class="keyvalue"> -- -- -- </span>
+            </div>
+            <div class="details-box">
+                <strong>Code</strong>
+                <span class="codevalue"> -- -- -- </span>
+            </div>
+            <div class="details-box">
+                <strong>Shift Key</strong>
+                <span class="shiftvalue"> -- -- -- </span>
+            </div>
+            <div class="details-box">
+                <strong>Ctrl</strong>
+                <span class="ctrlvalue"> -- -- -- </span>
+            </div>
+            <div class="details-box">
+                <strong>Alt</strong>
+                <span class="altvalue"> -- -- -- </span>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () =>{
+            const displayKey = document.querySelector(".display-key");
+            const keyValue = document.querySelector(".keyvalue");
+            const codeValue = document.querySelector(".codevalue");
+            const shiftValue = document.querySelector(".shiftvalue");
+            const ctrlValue = document.querySelector(".ctrlvalue");
+            const altValue = document.querySelector(".altvalue")
+
+            // You can check it by printing these values to your console.
+
+
+            document.addEventListener("keydown", (event) =>{
+                event.preventDefault();// To maintain default while scrolling.
+                
+                displayKey.textContent = event.key == " " ? "Space bar" : event.key;
+                // If it is empty then return space bar
+
+                displayKey.classList.add("pressed"); //Adding transition of blink
+
+                keyValue.textContent = event.key == " " ? "No Keys" : event.key; 
+                codeValue.textContent = event.code; //Address that form event of keys give me only the code one.
+                shiftValue.textContent = event.shiftKey ? "Ture" : "False"; //Addressing that from event of keys give me only the shift one if true then get otherwise not(false);
+                ctrlValue.textContent = event.ctrlKey ? "Ture" : "False"; // Same
+                altValue.textContent = event.altKey ? "Ture" : "False";
+
+            })
+
+            document.addEventListener("keyup", () =>{
+                displayKey.classList.remove("pressed");
+
+            })
+        })
+    </script>
+</body>
+</html>
