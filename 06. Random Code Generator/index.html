@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Code Generator - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #fff4f9;
+            --heading-color: #ff0088;
+            --para-color: #555;
+            --container-bg: #ffffff;
+            --input-color: #f0c6dc;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            min-height: 90vh;
+            margin: 0;
+            padding: 0px;
+            background-color: var(--main-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container{
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header{
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        h1{
+            margin-bottom: -5px;
+            font-size: 50px;
+            color: var(--heading-color);
+        }
+
+        p{
+            font-size: 18px;
+            color: var(--para-color);
+        }
+
+        .display-code{
+            /* border: 2px solid var(--heading-color); */
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            background-color: var(--input-color);
+            font-size: 25px;
+            color: var(--heading-color);
+            margin-bottom: 20px;
+            box-shadow: 0 0 4px var(--heading-color);
+            
+        }
+        
+        .buck{
+            overflow: scroll;
+
+        }
+        .inputContainer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* flex-direction: column; */
+            gap: 20px;
+        }
+
+        #charecterid{
+            width: 30%;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid rgb(207, 207, 207);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }  
+
+        /* #charecterid:hover{
+
+        } */
+        
+        #charecterid:focus{
+            outline: none;
+            border-color: var(--heading-color);
+            transform: scale(1.08);
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        .generate{
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            border: none;
+            background-color: var(--heading-color);
+            width: 60%;
+            font-size: 20px;
+            color: var(--container-bg);
+            transition: all 0.2s ease;
+        }
+        
+        .generate:hover{
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+        
+        .clicked{
+            transform: scale(0.94);
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Random Code Generator</h1>
+            <p>Give number of charecters and click the below button to generator random code according to your number of charecter.</p>
+        </div>
+        <div class="display-code" id="display">
+            Code will be Appear Here
+        </div>
+        <div class="inputContainer">
+            <input type="number" placeholder="Number" id="charecterid">
+            <button class="generate" id="generatebtn">Generate Code</button>
+        </div>
+    </div>
+
+    <script>
+
+        // Selecting all the elements
+        const displayCode = document.getElementById("display");
+        const generatebtn = document.getElementById("generatebtn");
+        const codeStrengthInput = document.getElementById("charecterid");
+
+        //Possible charecters list
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        
+        // Main function
+        const generateCode = () => {
+
+            // As we are taking input so, the values are in str form. Therefore, we need to conver thme into int values so that we can generate code as per code lenght.
+            const codeLength = parseInt(codeStrengthInput.value, 10);
+            
+            //Initially our result is none. Insure it should be empty don't give a space.
+            let result = "";
+
+            if(isNaN(codeLength) || codeLength <=0){
+                //Condition: if codeLength is "Not A Number" is Ture or False or If codelength is less than equal to 0 is True or False.
+                displayCode.textContent = "Enter Valid Number Insteed Of This!!";
+                displayCode.classList.remove("buck");
+                return; //Return the value and the function will be end
+            }
+
+            // Conditions for overflow and long values if it arise.
+            if(codeLength >= 36){
+                displayCode.classList.add("buck");
+            }else{
+                displayCode.classList.remove("buck");
+            }
+
+            // Loop for generating random code values.
+            for(let i = 0; i < codeLength; i++){
+                const indexvalue = Math.floor(Math.random() * characters.length); // It will give the indexs of charecters in the charecter variables
+                result += characters.charAt(indexvalue); //Then, we have to put all the index values into the displayed charecter form or in str.
+            }
+            displayCode.textContent = result; // Display result
+        }
+
+        generatebtn.addEventListener("click", () => {
+            // Adding the style effects
+            generatebtn.classList.toggle("clicked");
+            // Function declaration
+            generateCode();
+            // Using setTimeout after the happening of event within 0.14s, it will remove the class for clicking effect.
+            setTimeout(() => {
+                generatebtn.classList.remove("clicked");
+            }, 140);
+        })
+        
+    </script>
+</body>
+</html>
