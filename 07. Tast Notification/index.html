@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tast Notification - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #fff4f9;
+            --heading-color: #ff0088;
+            --para-color: #555;
+            --container-bg: #ffffff;
+            --light-color: #ffd1ea;
+
+        }
+
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--main-background);
+        }
+
+        .container{
+            text-align: center;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+        }
+
+        h1{
+            font-size: 40px;
+            color: var(--heading-color);
+            margin-bottom: 5px;
+        }
+
+        p{
+            font-size: 20px;
+            color: var(--para-color);
+        }
+
+        .tastbtn{
+            position: relative;
+            width: 70%;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            color: var(--para-color);
+            background-color: var(--light-color);
+            font-size: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .tastbtn:hover{
+            background-color: var(--heading-color);
+            color: var(--container-bg);
+        }
+
+        .clicked{
+            transform: scale(0.96);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .tast-container{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .tast{
+            background-color: var(--para-color);
+            color: var(--container-bg);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            opacity: 0;
+            animation: appear 0.2s ease forwards, disappear 0.6s ease 2s forwards;
+            min-width: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .tast.original{
+            background-color: var(--heading-color);
+        }
+
+        @keyframes appear {
+            from{
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to{
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes disappear {
+            from{
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to{
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Taste Notification</h1>
+        <p>Click the below button to show "Taste Notification"</p>
+        <button class="tastbtn" id="clickbtn">Click To Show</button>
+    </div>
+
+    <div class="tast-container" id="containertast"></div>
+    <script>
+
+        //Getting all elements
+        const button = document.getElementById("clickbtn");
+        const container = document.getElementById("containertast");
+
+        // Creating a function for generating or creating tast messages
+        function apperNotification(message){
+            // Create a new element
+            const tastElement = document.createElement("div");
+            // Then add both the class tast as well as original
+            tastElement.classList.add("tast", "original");
+            // The "original" is the advanced style based on this you can add various styles insteed of this. Or we can write this program in this way as well if you don't to add various colors.
+
+            // tastElement.classList.add("tast");
+            // Only you have to add a fixed background color in tast class.
+
+            
+            // In message we will display the message which we are going to give with event listener.
+            tastElement.textContent = message;
+
+            // After doing that we have to add this element into the tast-container.
+            container.appendChild(tastElement);
+
+            // After 5sec, the msg will disappear and the display becomes clean
+            setTimeout(() => {
+                tastElement.remove();
+            }, 5000);
+        }
+
+
+        // Adding event to button with define msg.
+        button.addEventListener("click", () => {
+            apperNotification("Hellow this is notification");
+        })
+
+        // WE CAN DO IT AT ADVANCED LEVEL AS WELL
+    </script>
+</body>
+</html>
