@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #fcf7f9;
+            --heading-color: #ff1a94;
+            --para-color: #555;
+            --container-bg: hsl(0, 0%, 100%);
+            --red: #ff6161;
+            --yellow: #fbff8d;
+            --green: #6ff992;
+            --red-text: #940000;
+            --yellow-text: #9ba007;
+            --green-text: #089955;
+        }
+
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: var(--main-background);
+        }
+
+        .top{
+            height: 40px;
+            width: 250px;
+            /* border: 2px solid black; */
+            margin-bottom: 10px;
+            border-radius: 30px;
+            background-color: var(--heading-color);
+        }
+        .container{
+            border: 6px solid var(--heading-color);
+            /* box-shadow: 0 0 10px rgba(0,0,0,0.4); */
+            padding: 2.5rem;
+            min-height: 300px;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            border-radius: 50%;
+            background-color: var(--container-bg);
+        }
+
+        .bottom{
+            /* border: 2px solid black; */
+            height: 50px;
+            margin-top: 7px;
+            width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .d1{
+            height: 100%;
+            width: 50%;
+            border-radius: 50px;
+            /* border: 2px solid black; */
+            background-color: var(--heading-color);
+        }
+
+        h1{
+            font-size: 40px;
+            color: var(--heading-color);
+            margin-bottom: 50px;
+        }
+
+        .display{
+            border: 2px solid rgb(216, 216, 216);
+            padding: 10px 30px;
+            font-size: 35px;
+            color: var(--para-color);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .controls{
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn{
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 17px;
+        }
+
+        #start-btn{
+            background-color: var(--red);
+            color: var(--red-text);
+        }
+
+        #pause-btn{
+            background-color: var(--yellow);
+            color: var(--yellow-text);
+        }
+
+        #reset-btn{
+            background-color: var(--green);
+            color: var(--green-text);
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="top"></div>
+    <div class="container">
+        <h1>Stopwatch</h1>
+        <div class="display" id="display">00:00:00</div>
+        <div class="controls">
+            <button id="start-btn" class="btn">Start</button>
+            <button id="pause-btn" class="btn" disabled>Pause</button>
+            <button id="reset-btn" class="btn" disabled>Resent</button>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="d1"></div>
+        <div class="d1"></div>
+    </div>
+    <script>
+        const display = document.getElementById("display");
+        const startbtn = document.getElementById("start-btn");
+        const pausebtn = document.getElementById("pause-btn");
+        const resetbtn = document.getElementById("reset-btn");
+
+
+        let timer = null;
+        let [millisecond, second, minutes] = [0, 0, 0];
+
+        function startWatch() {
+            millisecond += 10;
+            if(millisecond == 1000){
+                millisecond = 0;
+                second ++;
+                if(second == 60){
+                    second = 0;
+                    minutes++;
+                }
+            } 
+
+            let m = minutes < 10 ? "0" + minutes : minutes;
+            let s = second < 10 ? "0" + second : second;
+            let ms = millisecond < 100 ? "0" + Math.floor(millisecond/10) : Math.floor(millisecond/10);
+            
+            display.textContent = `${m}:${s}:${ms}`;
+        }
+        
+        function start() {
+            if(!timer){
+                timer = setInterval(startWatch, 10);
+                startbtn.disabled = true;
+                pausebtn.disabled = false;
+                resetbtn.disabled = false;
+            }
+        }
+
+        function pause() {
+            clearInterval(timer);
+            timer = null;
+            startbtn.disabled = false;
+            resetbtn.disabled = false;
+        }
+
+        function reset() {
+            clearInterval(timer);
+            timer = null;
+            [millisecond, second, minutes] = [0,0,0];
+            display.textContent = "00:00:00";
+            startbtn.disabled = false;
+            pausebtn.disabled = true;
+            resetbtn.disabled = true;
+        }
+
+        startbtn.addEventListener("click", start);
+        pausebtn.addEventListener("click", pause);
+        resetbtn.addEventListener("click", reset);
+    </script>
+</body>
+</html>

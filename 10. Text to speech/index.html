@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text To Speech - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #f8f2fa;
+            --dark-bg: #b819e9;
+            --para-color: #616060;
+            --container-bg: #fff;
+        }
+
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--main-background);
+        }
+        .container{
+            padding: 2rem 2.5rem;
+            text-align: center;
+            border-radius: 20px;
+            background-color: var(--container-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            font-size: 40px;
+            color: var(--dark-bg);
+            line-height: 20px;
+        }
+
+        p{
+            font-size: 20px;
+            color: var(--para-color);
+        }
+
+        .textarea{
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 18px;
+            border-color: var(--para-color);
+            transition: all 0.3s ease;
+            outline-color: var(--dark-bg);
+        }
+
+        .textarea::placeholder{
+            color: var(--dark-bg);
+        }
+
+        .control-button{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .voice-select{
+            min-width: 100px;
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 17px;
+            outline-color: var(--dark-bg);
+            color: var(--para-color);
+        }
+
+        .speak{
+            font-size: 18px;
+            padding: 15px 20px;
+            min-width: 40%;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            background-color: var(--dark-bg);
+            color: var(--container-bg);
+        }
+        
+        .clicked{
+            /* background-color: var(--container-bg); */
+            /* color: var(--dark-bg); */
+            transform: scale(0.97);
+            /* box-shadow: 0 4px 14px rgba(0,0,0,0.3); */
+            transition: transform 0.2s linear, box-shadow 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text To Speech Converter</h1>
+        <p>Type some text and "Click" the Speak Button to speak aloud.</p>
+
+        <textarea class="textarea" placeholder="Enter text here..." id="typingarea"></textarea>
+        <div class="control-button">
+            <select id="voice-select" class="voice-select">Empty Yet</select>
+            <button id="speak-btn" class="speak">Speak</button>
+        </div>
+    </div>
+    <script>
+        const inputText = document.getElementById("typingarea");
+        const voiceSelect = document.getElementById("voice-select");
+        const speakbtn = document.getElementById("speak-btn");
+
+
+        let voice = [];
+        const synth = window.speechSynthesis;
+
+        function populateVoice(){
+            voices = synth.getVoices().sort((a, b) => a.name.localeCompare(b.name));
+            voiceSelect.innerHTML = '';
+            
+            if(voices.lenght == 0){
+                voiceSelect.innerHTML = "<option> No Voice Available </option>";
+                speakbtn.disabled = true;
+                return;
+            }
+
+            voices.forEach(voice => {
+                const option = document.createElement("option");
+                option.textContent = `${voice.name} (${voice.lenght})`;
+
+                if(voice.lang.startsWith('en-')){
+                    option.selected = true;
+                }
+
+                option.value = voice.name;
+                voiceSelect.appendChild(option);
+            });
+
+            speakbtn.disabled = false;
+        }
+    
+        //Check voice
+
+        if(synth.onvoiceschanged !== undefined){
+            synth.onvoiceschanged = populateVoice;
+        } else{
+            populateVoice()
+        }
+
+        speakbtn.addEventListener("click", () => {
+
+            speakbtn.classList.add("clicked");
+
+            setTimeout(() => {
+                speakbtn.classList.remove("clicked");
+            }, 200);
+
+
+            const text = inputText.value.trim();
+
+            if(text === ""){
+                return
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            const selectedVoiceName = voiceSelect.value;
+            const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
+
+            if(selectedVoice){
+                utterance.voice = selectedVoice;
+            }
+
+            synth.speak(utterance);
+
+        })
+    </script>
+</body>
+</html>

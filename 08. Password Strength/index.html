@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength - Rebuild</title>
+    <style>
+        :root{
+            --main-background: #fff4f9;
+            --heading-color: #ff0088;
+            --para-color: #555;
+            --container-bg: #ffffff;
+            --weak-pass: #f71a0a;
+            --medium-pass: #fbff16;
+            --strong-pass: #11ff4c;
+        }
+
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 90vh;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--main-background);
+        }
+
+        .container{
+            background-color: var(--container-bg);
+            padding: 2rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            font-size: 40px;
+            color: var(--heading-color);
+            margin-bottom: 2px;
+        }
+
+        p{
+            font-size: 20px;
+            color: var(--para-color);
+        }
+
+        .inputcl{
+            margin-top: 9px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+            border: 2px solid rgb(178, 178, 178);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .inputcl:focus{
+            outline-color: var(--heading-color);
+        }
+
+        .progress-bar{
+            height: 15px;
+            background-color: rgb(236, 234, 234);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .bar{
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease, backgound-color 3s ease;
+        }
+
+        .text{
+            font-size: 20px;
+            color: var(--para-color);
+
+        }
+
+        .heading{
+            font-size: 21px;
+            color: black;
+            padding-left: 1px;
+        }
+
+        .bar.weak{
+            background-color: var(--weak-pass);
+        }
+        .bar.medium{
+            background-color: var(--medium-pass);
+        }
+        .bar.strong{
+            background-color: var(--strong-pass);
+        }
+
+
+        .text.weak{
+            color: var(--weak-pass);
+        }
+        .text.medium{
+            color: var(--medium-pass);
+        }
+        .bar.strong{
+            color: var(--strong-pass);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Check Your Password Strength</h1>
+        <p>Write your password and check its strength.</p>
+        <span class="heading">Password</span>
+        <input type="password" id="input-box" class="inputcl" placeholder="Enter your password">
+        <div class="progress-bar">
+            <div class="bar" id="pbar"></div>
+        </div>
+        <span class="text" id="ptext"></span>
+    </div>
+    <script>
+
+        // Selecting all required elements
+        const passinput = document.getElementById("input-box");
+        const passBar = document.getElementById("pbar");
+        const passText = document.getElementById("ptext");
+
+        // Writing function for detecting password strength
+        function passStrenght(password){
+            let score = 0;
+
+            // Rule 1: Password length
+            if (password.length >= 8) {
+                score += 1;
+            }
+
+            // Rule 2: Contains lowercase and uppercase letters
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
+                score += 1;
+            }
+
+            // Rule 3: Contains numbers
+            if (/[0-9]/.test(password)) {
+                score += 1;
+            }
+
+            // Rule 4: Contains special characters
+            if (/[^a-zA-Z0-9]/.test(password)) {
+                score += 1;
+            }
+
+            return score;
+        }
+
+        function updatePassStrength(score){
+            // We have to resent the classes styles.
+            passBar.classList.remove("weak", "medium", "strong");
+            passText.classList.remove("weak", "medium", "strong");
+
+
+            let width = 0; // This is for movement of status bar in real time
+            let text = ""; // This is for changing text as per password conditions
+
+            switch (score){
+                case 0: // If score is 0 then,
+                    width = 0;
+                    text = " ";
+                    break;
+                
+                case 1: // If score is 1 then,
+                    width = 25;
+                    text = "Weak";
+                    passBar.classList.add("weak");
+                    passText.classList.add("weak");
+                    break;
+                
+                case 2: // If score is 2 then,
+                    width = 50;
+                    text = "Medium"
+                    passBar.classList.add("medium");
+                    passText.classList.add("medium");
+                    break;
+
+                case 3: // If score is 3 then,
+                    width = 75;
+                    text = "Good"
+                    passBar.classList.add("strong");
+                    passText.classList.add("strong");
+                    break;
+
+                case 4: // If score is 4 then,
+                    width = 100;
+                    text = "Strong";
+                    passBar.classList.add("strong");
+                    passText.classList.add("strong");
+                    break;
+            }
+
+            // Updating the width and text as per above condition.
+            passBar.style.width = `${width}%`;
+            passText.textContent = text;
+
+
+        }
+        passinput.addEventListener("input", (eventval) => {
+            const password = eventval.target.value; // Getting password value through input
+            const score = passStrenght(password); // Assigning score value
+            updatePassStrength(score); 
+        })
+        </script>
+</body>
+</html>
